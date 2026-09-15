@@ -50,10 +50,25 @@ function selectCategory(cat, btnElem) {
 
 function filterAndRender() {
   const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
-  
+  const searchInfo = document.getElementById('searchInfo');
+
+  // Menampilkan teks informasi hasil pencarian jika kotak pencarian tidak kosong
+  if (keyword !== "") {
+    searchInfo.style.display = "block";
+    searchInfo.innerHTML = `Menampilkan hasil pencarian untuk: <b>"${document.getElementById('searchInput').value.trim()}"</b>`;
+  } else {
+    searchInfo.style.display = "none";
+    searchInfo.innerHTML = "";
+  }
+
+  // Filter data (include search pada judul atau konten)
   filteredPosts = allPosts.filter(post => {
-    const matchKeyword = (post.judul || "").toLowerCase().includes(keyword) || (post.konten || "").toLowerCase().includes(keyword);
+    const judul = (post.judul || "").toLowerCase();
+    const konten = (post.konten || "").toLowerCase();
+    
+    const matchKeyword = keyword === "" || judul.includes(keyword) || konten.includes(keyword);
     const matchCategory = (selectedCategory === "" || (post.kategori || "").trim().toLowerCase() === selectedCategory.toLowerCase());
+    
     return matchKeyword && matchCategory;
   });
 
