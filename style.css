@@ -1,3 +1,6 @@
+/* ========================================= */
+/* ROOT & GLOBAL STYLES                      */
+/* ========================================= */
 :root {
   --primary: #4f46e5;
   --primary-hover: #4338ca;
@@ -21,6 +24,9 @@ body {
   padding: 10px 20px 40px 20px;
 }
 
+/* ========================================= */
+/* HEADER & TITLE STYLES                     */
+/* ========================================= */
 .header-box {
   background: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
   padding: 10px 10px;
@@ -45,6 +51,9 @@ body {
   letter-spacing: 1px;
 }
 
+/* ========================================= */
+/* SEARCH & FILTER KATEGORI                  */
+/* ========================================= */
 .filter-section {
   display: flex;
   flex-direction: column;
@@ -85,6 +94,7 @@ body {
 }
 .search-btn:hover { background: var(--primary-hover); }
 
+/* Kategori Berjejer Pill Rounded */
 .categories-bar {
   display: flex;
   gap: 8px;
@@ -116,6 +126,9 @@ body {
   box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
 }
 
+/* ========================================= */
+/* GRID & CARD STYLES                        */
+/* ========================================= */
 .grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -204,6 +217,9 @@ body {
   gap: 5px;
 }
 
+/* ========================================= */
+/* LOAD MORE BUTTON                          */
+/* ========================================= */
 .load-more-container {
   text-align: center;
   margin-top: 50px;
@@ -226,6 +242,9 @@ body {
   transform: translateY(-2px);
 }
 
+/* ========================================= */
+/* FULL SCREEN MODAL                         */
+/* ========================================= */
 .modal {
   position: fixed;
   top: 0; left: 0; width: 100vw; height: 100vh;
@@ -273,6 +292,9 @@ body {
   padding: 60px 20px;
 }
 
+/* ========================================= */
+/* SLIDESHOW & THUMBNAILS                    */
+/* ========================================= */
 .slideshow-wrapper {
   position: relative;
   width: 100%;
