@@ -88,7 +88,6 @@
       transform: scale(1.08);
     }
     
-    /* Perbaikan: z-index ditinggikan agar tidak tertutup gambar saat di-hover */
     .category-badge {
       position: absolute;
       top: 15px;
@@ -179,7 +178,6 @@
       100% { opacity: 1; transform: translateY(0); }
     }
     
-    /* Perbaikan: Dikeluarkan dari .modal-content dan di-fixed murni di layar */
     .modal-close {
       position: fixed !important;
       top: 25px !important;
@@ -343,7 +341,6 @@
 <!-- MODAL FULL SCREEN                         -->
 <!-- ========================================= -->
 <div class="modal" id="postModal">
-  <!-- Perbaikan: Tombol Close dipindah keluar agar posisinya mutlak di layar -->
   <button class="modal-close" onclick="closeModal()">✕</button>
   
   <div class="modal-content">
@@ -465,9 +462,17 @@
     document.getElementById('modalTitle').innerText = post.judul;
     document.getElementById('modalDesc').innerText = post.konten;
     
+    // PERBAIKAN LINK EKSTERNAL AUTOMATIS HASIL REVISI
     const linkBtn = document.getElementById('modalLink');
-    if (post.customLink && post.customLink.trim() !== "") {
-      linkBtn.href = post.customLink;
+    let rawLink = (post.customLink || "").trim();
+
+    if (rawLink !== "") {
+      if (!/^https?:\/\//i.test(rawLink)) {
+        rawLink = 'https://' + rawLink;
+      }
+      linkBtn.href = rawLink;
+      linkBtn.target = "_blank";
+      linkBtn.rel = "noopener noreferrer";
       linkBtn.style.display = "inline-block";
     } else {
       linkBtn.style.display = "none";
