@@ -22,7 +22,6 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   if (searchInput) {
-    // Munculkan/Sembunyikan tombol silang berdasarkan isi input saat diketik
     searchInput.addEventListener('input', () => {
       if (clearSearchBtn) {
         clearSearchBtn.style.display = searchInput.value.trim() !== "" ? "flex" : "none";
@@ -36,13 +35,12 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Fungsi Tombol Silang (Clear) untuk mereset pencarian
   if (clearSearchBtn) {
     clearSearchBtn.addEventListener('click', () => {
       if (searchInput) {
         searchInput.value = "";
         clearSearchBtn.style.display = "none";
-        filterAndRender(); // Otomatis tampilkan semua card lagi
+        filterAndRender();
         searchInput.focus();
       }
     });
@@ -99,7 +97,6 @@ function filterAndRender() {
   const searchInfo = document.getElementById('searchInfo');
   const clearSearchBtn = document.getElementById('clearSearchBtn');
 
-  // Atur visibilitas tombol silang dan teks info pencarian di bawah kategori
   if (searchInfo) {
     if (keyword !== "") {
       searchInfo.style.display = "block";
@@ -112,7 +109,6 @@ function filterAndRender() {
     }
   }
 
-  // Filter data: Hanya mencocokkan teks pada JUDUL (post.judul)
   filteredPosts = allPosts.filter(post => {
     const judul = (post.judul || "").toLowerCase();
     
@@ -207,7 +203,8 @@ function openModal(index) {
 
     currentImages.forEach((imgUrl, i) => {
       if (mainContainer) {
-        mainContainer.innerHTML += `<img src="${imgUrl}" class="slide-img ${i === 0 ? 'active' : ''}" id="slideImg_${i}">`;
+        // Tambahkan event klik pada gambar slide untuk membuka lightbox zoom
+        mainContainer.innerHTML += `<img src="${imgUrl}" class="slide-img ${i === 0 ? 'active' : ''}" id="slideImg_${i}" onclick="openLightbox('${imgUrl}')" style="cursor: pointer;" title="Klik untuk memperbesar">`;
       }
       if (thumbList) {
         thumbList.innerHTML += `
@@ -279,6 +276,24 @@ function updateSlideActiveState() {
       if (imgElem) imgElem.classList.remove('active');
       if (thumbElem) thumbElem.classList.remove('active');
     }
+  }
+}
+
+// Fungsi untuk membuka Lightbox Zoom Fullscreen
+function openLightbox(imgUrl) {
+  const lightbox = document.getElementById('lightboxModal');
+  const lightboxImg = document.getElementById('lightboxImg');
+  if (lightbox && lightboxImg) {
+    lightboxImg.src = imgUrl;
+    lightbox.classList.add('show');
+  }
+}
+
+// Fungsi untuk menutup Lightbox
+function closeLightbox() {
+  const lightbox = document.getElementById('lightboxModal');
+  if (lightbox) {
+    lightbox.classList.remove('show');
   }
 }
 
