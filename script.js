@@ -12,29 +12,16 @@ window.addEventListener('DOMContentLoaded', () => { fetchData(); });
 async function fetchData() {
   try {
     const response = await fetch('./posts.json');
-    
-    // Cek jika status file tidak OK (misal: 404 Not Found)
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status} (File posts.json tidak ditemukan atau salah path)`);
-    }
+    if (!response.ok) throw new Error("File tidak ditemukan.");
     
     const data = await response.json();
     allPosts = data.posts || data;
     
-    if (!Array.isArray(allPosts)) {
-      throw new Error("Format JSON salah: Property 'posts' harus berupa array ([...])");
-    }
-    
     renderCategories(data.categories || extractCatsFromPosts(allPosts));
     filterAndRender(); 
   } catch (error) {
-    console.error("Detail Error Fetch:", error);
-    document.getElementById('postsGrid').innerHTML = `
-      <div class='loading-state' style='color: #ef4444;'>
-        ⚠️ Gagal memuat data.<br>
-        <small style="font-size: 0.85rem; color: #64748b;">Pesan: ${error.message}</small><br>
-        <small style="font-size: 0.85rem; color: #64748b;">Tips: Buka Inspect Element (F12) > Console untuk melihat detail error.</small>
-      </div>`;
+    console.error(error);
+    document.getElementById('postsGrid').innerHTML = "<div class='loading-state'>Gagal memuat data.</div>";
   }
 }
 
@@ -65,12 +52,8 @@ function filterAndRender() {
   const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
   
   filteredPosts = allPosts.filter(post => {
-    const judul = (post.judul || "").toLowerCase();
-    const konten = (post.konten || "").toLowerCase();
-    
-    const matchKeyword = keyword === "" || judul.includes(keyword) || konten.includes(keyword);
+    const matchKeyword = (post.judul || "").toLowerCase().includes(keyword) || (post.konten || "").toLowerCase().includes(keyword);
     const matchCategory = (selectedCategory === "" || (post.kategori || "").trim().toLowerCase() === selectedCategory.toLowerCase());
-    
     return matchKeyword && matchCategory;
   });
 
