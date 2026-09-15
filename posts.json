@@ -6,6 +6,15 @@
   ],
   "posts": [
     {
+      "no": 9,
+      "judul": "Postingan ke 3 (Copy)",
+      "kategori": "",
+      "konten": 123,
+      "gambar": "https://lh3.googleusercontent.com/d/1WhmufURPzw2kWxfBblRsopquac792diX, https://lh3.googleusercontent.com/d/1eMMUjFJiKOIFbctOOTgBcRnFEASJmATO, https://lh3.googleusercontent.com/d/1wC4blXN81huSnW8zSceQ6lWUjw8cXhAk",
+      "customLink": 345,
+      "tanggal": "2026-09-15T06:37:28.288Z"
+    },
+    {
       "no": 8,
       "judul": "Postingan baru (Copy)",
       "kategori": "",
