@@ -10,9 +10,9 @@ let selectedCategory = "";
 window.addEventListener('DOMContentLoaded', () => { 
   fetchData(); 
 
-  // Menghubungkan fungsi pencarian ke tombol Cari dan tombol Enter secara aman
   const searchInput = document.getElementById('searchInput');
   const searchBtn = document.getElementById('searchBtn');
+  const clearSearchBtn = document.getElementById('clearSearchBtn');
 
   if (searchBtn) {
     searchBtn.addEventListener('click', (e) => {
@@ -22,9 +22,28 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   if (searchInput) {
+    // Munculkan/Sembunyikan tombol silang berdasarkan isi input saat diketik
+    searchInput.addEventListener('input', () => {
+      if (clearSearchBtn) {
+        clearSearchBtn.style.display = searchInput.value.trim() !== "" ? "flex" : "none";
+      }
+    });
+
     searchInput.addEventListener('keyup', (event) => {
       if (event.key === 'Enter') {
         filterAndRender();
+      }
+    });
+  }
+
+  // Fungsi Tombol Silang (Clear) untuk mereset pencarian
+  if (clearSearchBtn) {
+    clearSearchBtn.addEventListener('click', () => {
+      if (searchInput) {
+        searchInput.value = "";
+        clearSearchBtn.style.display = "none";
+        filterAndRender(); // Otomatis tampilkan semua card lagi
+        searchInput.focus();
       }
     });
   }
@@ -78,19 +97,22 @@ function filterAndRender() {
   const inputElem = document.getElementById('searchInput');
   const keyword = inputElem ? inputElem.value.toLowerCase().trim() : "";
   const searchInfo = document.getElementById('searchInfo');
+  const clearSearchBtn = document.getElementById('clearSearchBtn');
 
-  // Menampilkan teks informasi hasil pencarian "..." jika kotak pencarian diisi
+  // Atur visibilitas tombol silang dan teks info pencarian di bawah kategori
   if (searchInfo) {
     if (keyword !== "") {
       searchInfo.style.display = "block";
       searchInfo.innerHTML = `Menampilkan hasil pencarian untuk: <b>"${inputElem.value.trim()}"</b>`;
+      if (clearSearchBtn) clearSearchBtn.style.display = "flex";
     } else {
       searchInfo.style.display = "none";
       searchInfo.innerHTML = "";
+      if (clearSearchBtn) clearSearchBtn.style.display = "none";
     }
   }
 
-  // Filter data: HANYA mencocokkan teks pada JUDUL (post.judul)
+  // Filter data: Hanya mencocokkan teks pada JUDUL (post.judul)
   filteredPosts = allPosts.filter(post => {
     const judul = (post.judul || "").toLowerCase();
     
