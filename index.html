@@ -18,9 +18,12 @@
   <!-- Search & Category Pills Section -->
   <div class="filter-section">
     <div class="search-bar-wrapper">
-      <input type="text" id="searchInput" class="search-input" placeholder="Cari judul postingan..." onkeyup="if(event.key==='Enter') filterAndRender()">
-      <button class="search-btn" onclick="filterAndRender()">🔍 Cari</button>
+      <input type="text" id="searchInput" class="search-input" placeholder="Cari judul postingan...">
+      <button id="searchBtn" class="search-btn">🔍 Cari</button>
     </div>
+    
+    <!-- Informasi Hasil Pencarian -->
+    <div id="searchInfo" style="text-align: center; font-size: 0.95rem; color: var(--text-muted); display: none; margin-top: 5px;"></div>
     
     <!-- Kategori Bulat Kecil Berjejer -->
     <div class="categories-bar" id="categoriesBar">
