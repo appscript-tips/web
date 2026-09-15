@@ -59,7 +59,6 @@ body {
   width: 100%;
 }
 
-/* Wrapper untuk Input dan Tombol Silang */
 .search-input-container {
   position: relative;
   flex: 1;
@@ -82,7 +81,6 @@ body {
   box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
 }
 
-/* Styling Tombol Silang (Clear) di dalam Input */
 .clear-search-btn {
   position: absolute;
   right: 12px;
@@ -117,7 +115,6 @@ body {
 }
 .search-btn:hover { background: var(--primary-hover); }
 
-/* Teks Info Hasil Pencarian di Bawah Kategori */
 .search-info-text {
   text-align: center;
   font-size: 0.95rem;
@@ -386,7 +383,7 @@ body {
 .modal-desc { font-size: 1.1rem; color: #334155; line-height: 1.8; white-space: pre-line; margin-bottom: 40px; }
 
 /* ========================================= */
-/* MODAL ACTIONS (LINK, WA, & TUTORIAL)      */
+/* MODAL ACTIONS (GRADIENT, WA, & TUTORIAL)  */
 /* ========================================= */
 .modal-actions {
   display: flex;
@@ -396,21 +393,30 @@ body {
   margin-top: 20px;
 }
 
-.modal-link {
+.gradient-link {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: linear-gradient(135deg, var(--primary) 0%, #6366f1 100%);
-  color: white;
+  background: #ffffff;
+  color: var(--primary);
+  border: 2px solid var(--primary);
   text-decoration: none;
-  padding: 15px 25px;
+  padding: 13px 25px;
   border-radius: 30px;
   font-weight: bold;
   font-size: 1rem;
-  box-shadow: 0 10px 20px rgba(79,70,229,0.3);
+  box-shadow: 0 4px 15px rgba(79, 70, 229, 0.1);
   transition: all 0.3s;
 }
-.modal-link:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(79,70,229,0.4); }
+.gradient-link:hover {
+  background: var(--primary);
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+}
+.gradient-link:hover .download-gradient-icon {
+  stroke: #ffffff;
+}
 
 .btn-request-custom {
   display: inline-flex;
@@ -431,7 +437,9 @@ body {
   transform: translateY(-3px);
   box-shadow: 0 15px 25px rgba(37, 211, 102, 0.4);
 }
-.wa-icon { fill: currentColor; }
+.wa-img-icon {
+  object-fit: contain;
+}
 
 .btn-tutorial {
   display: inline-flex;
@@ -452,7 +460,6 @@ body {
   transform: translateY(-3px);
   box-shadow: 0 15px 25px rgba(14, 165, 233, 0.4);
 }
-.book-icon { fill: none; }
 
 .loading-state { 
   grid-column: 1 / -1;
