@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Postingan Publik</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+  <!-- Header Rounded Super Cantik -->
+  <div class="header-box">
+    <h1 class="page-title">Apps Script Web App</h1>
+    <p class="page-subtitle">Free copy spreadsheet</p>
+  </div>
+
+  <!-- Search & Category Pills Section -->
+  <div class="filter-section">
+    <div class="search-bar-wrapper">
+      <input type="text" id="searchInput" class="search-input" placeholder="Cari judul postingan..." onkeyup="if(event.key==='Enter') filterAndRender()">
+      <button class="search-btn" onclick="filterAndRender()">🔍 Cari</button>
+    </div>
+    
+    <!-- Kategori Bulat Kecil Berjejer -->
+    <div class="categories-bar" id="categoriesBar">
+      <button class="cat-pill active" onclick="selectCategory('', this)">Semua</button>
+    </div>
+  </div>
+  
+  <div class="grid" id="postsGrid">
+    <div class="loading-state">⏳ Sedang memuat data terbaru...</div>
+  </div>
+
+  <div class="load-more-container" id="loadMoreContainer" style="display: none;">
+    <button class="btn-load-more" onclick="loadMorePosts()">↓ Muat Lebih Banyak</button>
+  </div>
+</div>
+
+<!-- ========================================= -->
+<!-- MODAL FULL SCREEN                         -->
+<!-- ========================================= -->
+<div class="modal" id="postModal">
+  <button class="modal-close" onclick="closeModal()">✕</button>
+  
+  <div class="modal-content">
+    <div class="slideshow-wrapper" id="slideshowWrapper" style="display: none;">
+      <div class="slide-main-container" id="slideMainContainer"></div>
+      <button class="slide-btn slide-prev" onclick="changeSlide(-1)">❮</button>
+      <button class="slide-btn slide-next" onclick="changeSlide(1)">❯</button>
+    </div>
+
+    <div class="thumbnail-list" id="thumbnailList"></div>
+    
+    <h1 class="modal-title" id="modalTitle"></h1>
+    <div class="modal-desc" id="modalDesc"></div>
+    
+    <a href="#" target="_blank" class="modal-link" id="modalLink" style="display: none;">🔗 Kunjungi Tautan</a>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
