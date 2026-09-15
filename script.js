@@ -7,7 +7,28 @@ let currentImages = [];
 let currentSlideIndex = 0;
 let selectedCategory = "";
 
-window.addEventListener('DOMContentLoaded', () => { fetchData(); });
+window.addEventListener('DOMContentLoaded', () => { 
+  fetchData(); 
+
+  // Menghubungkan fungsi pencarian ke tombol Cari dan tombol Enter secara aman
+  const searchInput = document.getElementById('searchInput');
+  const searchBtn = document.getElementById('searchBtn');
+
+  if (searchBtn) {
+    searchBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      filterAndRender();
+    });
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener('keyup', (event) => {
+      if (event.key === 'Enter') {
+        filterAndRender();
+      }
+    });
+  }
+});
 
 async function fetchData() {
   try {
@@ -21,7 +42,10 @@ async function fetchData() {
     filterAndRender(); 
   } catch (error) {
     console.error(error);
-    document.getElementById('postsGrid').innerHTML = "<div class='loading-state'>Gagal memuat data.</div>";
+    const grid = document.getElementById('postsGrid');
+    if (grid) {
+      grid.innerHTML = "<div class='loading-state'>Gagal memuat data.</div>";
+    }
   }
 }
 
@@ -33,6 +57,8 @@ function extractCatsFromPosts(posts) {
 
 function renderCategories(categories) {
   const bar = document.getElementById('categoriesBar');
+  if (!bar) return;
+  
   let html = `<button class="cat-pill ${selectedCategory === '' ? 'active' : ''}" onclick="selectCategory('', this)">Semua</button>`;
   
   categories.forEach(cat => {
@@ -44,25 +70,46 @@ function renderCategories(categories) {
 function selectCategory(cat, btnElem) {
   selectedCategory = cat;
   document.querySelectorAll('.cat-pill').forEach(btn => btn.classList.remove('active'));
-  btnElem.classList.add('active');
+  if (btnElem) btnElem.classList.add('active');
   filterAndRender();
 }
 
 function filterAndRender() {
-  const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
-  
+  const inputElem = document.getElementById('searchInput');
+  const keyword = inputElem ? inputElem.value.toLowerCase().trim() : "";
+  const searchInfo = document.getElementById('searchInfo');
+
+  // Menampilkan teks informasi hasil pencarian "..." jika kotak pencarian diisi
+  if (searchInfo) {
+    if (keyword !== "") {
+      searchInfo.style.display = "block";
+      searchInfo.innerHTML = `Menampilkan hasil pencarian untuk: <b>"${inputElem.value.trim()}"</b>`;
+    } else {
+      searchInfo.style.display = "none";
+      searchInfo.innerHTML = "";
+    }
+  }
+
+  // Filter data: HANYA mencocokkan teks pada JUDUL (post.judul)
   filteredPosts = allPosts.filter(post => {
-    const matchKeyword = (post.judul || "").toLowerCase().includes(keyword) || (post.konten || "").toLowerCase().includes(keyword);
+    const judul = (post.judul || "").toLowerCase();
+    
+    const matchKeyword = keyword === "" || judul.includes(keyword);
     const matchCategory = (selectedCategory === "" || (post.kategori || "").trim().toLowerCase() === selectedCategory.toLowerCase());
+    
     return matchKeyword && matchCategory;
   });
 
   currentDisplayed = 0;
-  document.getElementById('postsGrid').innerHTML = "";
+  const grid = document.getElementById('postsGrid');
+  if (grid) grid.innerHTML = "";
   
   if (filteredPosts.length === 0) {
-    document.getElementById('postsGrid').innerHTML = "<div class='loading-state'>Tidak ada postingan yang ditemukan.</div>";
-    document.getElementById('loadMoreContainer').style.display = 'none';
+    if (grid) {
+      grid.innerHTML = "<div class='loading-state'>Tidak ada postingan yang ditemukan dengan judul tersebut.</div>";
+    }
+    const loadMoreContainer = document.getElementById('loadMoreContainer');
+    if (loadMoreContainer) loadMoreContainer.style.display = 'none';
     return;
   }
 
@@ -71,6 +118,8 @@ function filterAndRender() {
 
 function loadMorePosts() {
   const grid = document.getElementById('postsGrid');
+  if (!grid) return;
+
   const end = Math.min(currentDisplayed + postsPerLoad, filteredPosts.length);
 
   for (let i = currentDisplayed; i < end; i++) {
@@ -97,11 +146,16 @@ function loadMorePosts() {
   }
 
   currentDisplayed = end;
-  document.getElementById('loadMoreContainer').style.display = (currentDisplayed >= filteredPosts.length) ? 'none' : 'block';
+  const loadMoreContainer = document.getElementById('loadMoreContainer');
+  if (loadMoreContainer) {
+    loadMoreContainer.style.display = (currentDisplayed >= filteredPosts.length) ? 'none' : 'block';
+  }
 }
 
 function openModal(index) {
   const post = allPosts[index];
+  if (!post) return;
+
   const modal = document.getElementById('postModal');
   
   currentImages = (post.gambar || "").split(',').map(s => s.trim()).filter(s => s !== "");
@@ -113,53 +167,63 @@ function openModal(index) {
   const prevBtn = document.querySelector('.slide-prev');
   const nextBtn = document.querySelector('.slide-next');
 
-  mainContainer.innerHTML = "";
-  thumbList.innerHTML = "";
+  if (mainContainer) mainContainer.innerHTML = "";
+  if (thumbList) thumbList.innerHTML = "";
 
   if (currentImages.length > 0) {
-    wrapper.style.display = "block";
+    if (wrapper) wrapper.style.display = "block";
     
-    if (currentImages.length <= 1) {
-      prevBtn.style.display = "none";
-      nextBtn.style.display = "none";
-    } else {
-      prevBtn.style.display = "flex";
-      nextBtn.style.display = "flex";
+    if (prevBtn && nextBtn) {
+      if (currentImages.length <= 1) {
+        prevBtn.style.display = "none";
+        nextBtn.style.display = "none";
+      } else {
+        prevBtn.style.display = "flex";
+        nextBtn.style.display = "flex";
+      }
     }
 
     currentImages.forEach((imgUrl, i) => {
-      mainContainer.innerHTML += `<img src="${imgUrl}" class="slide-img ${i === 0 ? 'active' : ''}" id="slideImg_${i}">`;
-      thumbList.innerHTML += `
-        <div class="thumb-item ${i === 0 ? 'active' : ''}" id="thumb_${i}" onclick="goToSlide(${i})">
-          <img src="${imgUrl}" loading="lazy">
-        </div>
-      `;
+      if (mainContainer) {
+        mainContainer.innerHTML += `<img src="${imgUrl}" class="slide-img ${i === 0 ? 'active' : ''}" id="slideImg_${i}">`;
+      }
+      if (thumbList) {
+        thumbList.innerHTML += `
+          <div class="thumb-item ${i === 0 ? 'active' : ''}" id="thumb_${i}" onclick="goToSlide(${i})">
+            <img src="${imgUrl}" loading="lazy">
+          </div>
+        `;
+      }
     });
-    thumbList.style.display = "flex";
+    if (thumbList) thumbList.style.display = "flex";
   } else {
-    wrapper.style.display = "none";
-    thumbList.style.display = "none";
+    if (wrapper) wrapper.style.display = "none";
+    if (thumbList) thumbList.style.display = "none";
   }
 
-  document.getElementById('modalTitle').innerText = post.judul;
-  document.getElementById('modalDesc').innerText = post.konten;
+  const modalTitle = document.getElementById('modalTitle');
+  const modalDesc = document.getElementById('modalDesc');
+  if (modalTitle) modalTitle.innerText = post.judul;
+  if (modalDesc) modalDesc.innerText = post.konten;
   
   const linkBtn = document.getElementById('modalLink');
   let rawLink = (post.customLink || "").trim();
 
-  if (rawLink !== "") {
-    if (!/^https?:\/\//i.test(rawLink)) {
-      rawLink = 'https://' + rawLink;
+  if (linkBtn) {
+    if (rawLink !== "") {
+      if (!/^https?:\/\//i.test(rawLink)) {
+        rawLink = 'https://' + rawLink;
+      }
+      linkBtn.href = rawLink;
+      linkBtn.target = "_blank";
+      linkBtn.rel = "noopener noreferrer";
+      linkBtn.style.display = "inline-block";
+    } else {
+      linkBtn.style.display = "none";
     }
-    linkBtn.href = rawLink;
-    linkBtn.target = "_blank";
-    linkBtn.rel = "noopener noreferrer";
-    linkBtn.style.display = "inline-block";
-  } else {
-    linkBtn.style.display = "none";
   }
 
-  modal.classList.add('show');
+  if (modal) modal.classList.add('show');
   document.body.style.overflow = "hidden";
 }
 
@@ -184,18 +248,20 @@ function updateSlideActiveState() {
     const thumbElem = document.getElementById(`thumb_${i}`);
     
     if (i === currentSlideIndex) {
-      imgElem.classList.add('active');
-      thumbElem.classList.add('active');
-      thumbElem.scrollIntoView({ behavior: 'smooth', inline: 'nearest', block: 'nearest' });
+      if (imgElem) imgElem.classList.add('active');
+      if (thumbElem) {
+        thumbElem.classList.add('active');
+        thumbElem.scrollIntoView({ behavior: 'smooth', inline: 'nearest', block: 'nearest' });
+      }
     } else {
-      imgElem.classList.remove('active');
-      thumbElem.classList.remove('active');
+      if (imgElem) imgElem.classList.remove('active');
+      if (thumbElem) thumbElem.classList.remove('active');
     }
   }
 }
 
 function closeModal() {
   const modal = document.getElementById('postModal');
-  modal.classList.remove('show');
+  if (modal) modal.classList.remove('show');
   document.body.style.overflow = "auto";
 }
