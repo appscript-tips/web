@@ -203,7 +203,6 @@ function openModal(index) {
 
     currentImages.forEach((imgUrl, i) => {
       if (mainContainer) {
-        // Tambahkan event klik pada gambar slide untuk membuka lightbox zoom
         mainContainer.innerHTML += `<img src="${imgUrl}" class="slide-img ${i === 0 ? 'active' : ''}" id="slideImg_${i}" onclick="openLightbox('${imgUrl}')" style="cursor: pointer;" title="Klik untuk memperbesar">`;
       }
       if (thumbList) {
@@ -225,6 +224,7 @@ function openModal(index) {
   if (modalTitle) modalTitle.innerText = post.judul;
   if (modalDesc) modalDesc.innerText = post.konten;
   
+  // 1. Tautan Eksternal Utama
   const linkBtn = document.getElementById('modalLink');
   let rawLink = (post.customLink || "").trim();
 
@@ -239,6 +239,35 @@ function openModal(index) {
       linkBtn.style.display = "inline-block";
     } else {
       linkBtn.style.display = "none";
+    }
+  }
+
+  // 2. Tombol Request WhatsApp
+  const requestBtn = document.getElementById('requestCustomBtn');
+  if (requestBtn) {
+    const waNumber = "6281234567890"; // Ganti dengan nomor WhatsApp kamu
+    const waText = encodeURIComponent(`Halo, saya ingin request custom terkait postingan: *${post.judul}*`);
+    requestBtn.href = `https://wa.me/${waNumber}?text=${waText}`;
+  }
+
+  // 3. Tombol Cara Pasang / Salin Web App
+  const tutorialBtn = document.getElementById('tutorialBtn');
+  if (tutorialBtn) {
+    const tutorialLink = (post.tutorialLink || "").trim();
+    if (tutorialLink !== "") {
+      let formattedTutorial = tutorialLink;
+      if (!/^https?:\/\//i.test(formattedTutorial)) {
+        formattedTutorial = 'https://' + formattedTutorial;
+      }
+      tutorialBtn.href = formattedTutorial;
+      tutorialBtn.target = "_blank";
+      tutorialBtn.rel = "noopener noreferrer";
+      tutorialBtn.style.display = "inline-flex";
+    } else {
+      // Jika kosong di JSON, arahkan ke link default atau sembunyikan (misal diatur ke YouTube atau link panduan umum)
+      tutorialBtn.href = "https://youtube.com"; 
+      tutorialBtn.target = "_blank";
+      tutorialBtn.style.display = "inline-flex";
     }
   }
 
@@ -279,7 +308,6 @@ function updateSlideActiveState() {
   }
 }
 
-// Fungsi untuk membuka Lightbox Zoom Fullscreen
 function openLightbox(imgUrl) {
   const lightbox = document.getElementById('lightboxModal');
   const lightboxImg = document.getElementById('lightboxImg');
@@ -289,7 +317,6 @@ function openLightbox(imgUrl) {
   }
 }
 
-// Fungsi untuk menutup Lightbox
 function closeLightbox() {
   const lightbox = document.getElementById('lightboxModal');
   if (lightbox) {
