@@ -79,6 +79,28 @@
   window.addEventListener('DOMContentLoaded', () => {
     loadPublicPosts();
   });
+
+  async function loadPublicPosts() {
+    try {
+      const response = await fetch('./posts.json');
+      const data = await response.json();
+      
+      // Mengambil array List Kategori
+      const daftarKategori = data.categories; 
+      console.log("Kategori:", daftarKategori);
+
+      // Mengambil array Postingan
+      const postingan = data.posts;
+      console.log("Postingan:", postingan);
+      
+      // ... Render ke HTML ...
+
+    } catch (error) {
+      console.error("Gagal meload postingan:", error);
+    }
+  }
+
+  
 </script>
 
 </body>
