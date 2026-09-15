@@ -9,16 +9,6 @@ let selectedCategory = "";
 
 window.addEventListener('DOMContentLoaded', () => { fetchData(); });
 
-function showSmoothLoading(callback) {
-  const indicator = document.getElementById('loadingIndicator');
-  indicator.classList.add('show');
-  
-  setTimeout(() => {
-    callback();
-    indicator.classList.remove('show');
-  }, 250);
-}
-
 async function fetchData() {
   try {
     const response = await fetch('./posts.json');
@@ -52,72 +42,66 @@ function renderCategories(categories) {
 }
 
 function selectCategory(cat, btnElem) {
-  showSmoothLoading(() => {
-    selectedCategory = cat;
-    document.querySelectorAll('.cat-pill').forEach(btn => btn.classList.remove('active'));
-    btnElem.classList.add('active');
-    filterAndRender();
-  });
+  selectedCategory = cat;
+  document.querySelectorAll('.cat-pill').forEach(btn => btn.classList.remove('active'));
+  btnElem.classList.add('active');
+  filterAndRender();
 }
 
 function filterAndRender() {
-  showSmoothLoading(() => {
-    const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
+  const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
+  
+  filteredPosts = allPosts.filter(post => {
+    const judul = (post.judul || "").toLowerCase();
+    const konten = (post.konten || "").toLowerCase();
     
-    filteredPosts = allPosts.filter(post => {
-      const judul = (post.judul || "").toLowerCase();
-      const konten = (post.konten || "").toLowerCase();
-      
-      const matchKeyword = keyword === "" || judul.includes(keyword) || konten.includes(keyword);
-      const matchCategory = (selectedCategory === "" || (post.kategori || "").trim().toLowerCase() === selectedCategory.toLowerCase());
-      
-      return matchKeyword && matchCategory;
-    });
-
-    currentDisplayed = 0;
-    document.getElementById('postsGrid').innerHTML = "";
+    const matchKeyword = keyword === "" || judul.includes(keyword) || konten.includes(keyword);
+    const matchCategory = (selectedCategory === "" || (post.kategori || "").trim().toLowerCase() === selectedCategory.toLowerCase());
     
-    if (filteredPosts.length === 0) {
-      document.getElementById('postsGrid').innerHTML = "<div class='loading-state'>Tidak ada postingan yang ditemukan.</div>";
-      document.getElementById('loadMoreContainer').style.display = 'none';
-      return;
-    }
-
-    loadMorePosts();
+    return matchKeyword && matchCategory;
   });
+
+  currentDisplayed = 0;
+  document.getElementById('postsGrid').innerHTML = "";
+  
+  if (filteredPosts.length === 0) {
+    document.getElementById('postsGrid').innerHTML = "<div class='loading-state'>Tidak ada postingan yang ditemukan.</div>";
+    document.getElementById('loadMoreContainer').style.display = 'none';
+    return;
+  }
+
+  loadMorePosts();
 }
 
 function loadMorePosts() {
-  showSmoothLoading(() => {
-    const grid = document.getElementById('postsGrid');
-    const end = Math.min(currentDisplayed + postsPerLoad, filteredPosts.length);
+  const grid = document.getElementById('postsGrid');
+  const end = Math.min(currentDisplayed + postsPerLoad, filteredPosts.length);
 
-    for (let i = currentDisplayed; i < end; i++) {
-      const post = filteredPosts[i];
-      const originalIndex = allPosts.indexOf(post);
-      
-      const images = (post.gambar || "").split(',').map(s => s.trim()).filter(s => s !== "");
-      const thumbnailSrc = images.length > 0 ? images[0] : "https://via.placeholder.com/600x400/e2e8f0/64748b?text=Tanpa+Gambar";
-      const kategoriText = post.kategori || "Uncategorized";
+  for (let i = currentDisplayed; i < end; i++) {
+    const post = filteredPosts[i];
+    const originalIndex = allPosts.indexOf(post);
+    
+    const images = (post.gambar || "").split(',').map(s => s.trim()).filter(s => s !== "");
+    const thumbnailSrc = images.length > 0 ? images[0] : "https://via.placeholder.com/600x400/e2e8f0/64748b?text=Tanpa+Gambar";
+    const kategoriText = post.kategori || "Uncategorized";
 
-      const cardHtml = `
-        <div class="card" onclick="openModal(${originalIndex})">
-          <div class="card-thumb-container">
-            <span class="category-badge">${kategoriText}</span>
-            <img src="${thumbnailSrc}" class="card-thumb" alt="Thumbnail" loading="lazy">
-          </div>
-          <div class="card-content">
-            <h3 class="card-title">${post.judul}</h3>
-            <span class="card-action-text">Klik untuk lihat detail <span>→</span></span>
-          </div>
+    const cardHtml = `
+      <div class="card" onclick="openModal(${originalIndex})">
+        <div class="card-thumb-container">
+          <span class="category-badge">${kategoriText}</span>
+          <img src="${thumbnailSrc}" class="card-thumb" alt="Thumbnail" loading="lazy">
         </div>
-      `;
-      grid.insertAdjacentHTML('beforeend', cardHtml);
-    }
+        <div class="card-content">
+          <h3 class="card-title">${post.judul}</h3>
+          <span class="card-action-text">Klik untuk lihat detail <span>→</span></span>
+        </div>
+      </div>
+    `;
+    grid.insertAdjacentHTML('beforeend', cardHtml);
+  }
 
-    currentDisplayed = end;
-    document.getElementById('loadMoreContainer').style.display = (currentDisplayed >= filteredPosts.length) ? 'none' : 'block';
-  });
+  currentDisplayed = end;
+  document.getElementById('loadMoreContainer').style.display = (currentDisplayed >= filteredPosts.length) ? 'none' : 'block';
 }
 
 function openModal(index) {
