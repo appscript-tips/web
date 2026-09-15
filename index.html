@@ -18,6 +18,13 @@
       --radius: 20px;
     }
     body {
+
+      <!-- Indikator Loading Smooth Melayang -->
+  <div class="loading-overlay" id="loadingIndicator">
+    <div class="mini-spinner"></div>
+    <span>Memuat...</span>
+  </div>
+    
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background-color: var(--bg-color);
       color: var(--text-main);
@@ -483,7 +490,7 @@
 </div>
 
 <script>
-  let allPosts = [];
+ let allPosts = [];
   let filteredPosts = [];
   let currentDisplayed = 0;
   const postsPerLoad = 9;
@@ -494,6 +501,17 @@
 
   window.addEventListener('DOMContentLoaded', () => { fetchData(); });
 
+  // Fungsi helper untuk efek loading yang smooth (jeda tipis agar animasi terasa)
+  function showSmoothLoading(callback) {
+    const indicator = document.getElementById('loadingIndicator');
+    indicator.classList.add('show');
+    
+    setTimeout(() => {
+      callback();
+      indicator.classList.remove('show');
+    }, 250); // Jeda 0.25 detik agar transisi mata melihat mulus
+  }
+
   async function fetchData() {
     try {
       const response = await fetch('./posts.json');
@@ -502,10 +520,8 @@
       const data = await response.json();
       allPosts = data.posts || data;
       
-      // Render Kategori dari data JSON (mengambil dari data.categories atau otomatis dari posts)
       renderCategories(data.categories || extractCatsFromPosts(allPosts));
-
-      filterAndRender(); // Tampilkan awal
+      filterAndRender(); 
     } catch (error) {
       console.error(error);
       document.getElementById('postsGrid').innerHTML = "<div class='loading-state'>Gagal memuat data.</div>";
@@ -520,7 +536,6 @@
 
   function renderCategories(categories) {
     const bar = document.getElementById('categoriesBar');
-    // Pertahankan tombol "Semua"
     let html = `<button class="cat-pill ${selectedCategory === '' ? 'active' : ''}" onclick="selectCategory('', this)">Semua</button>`;
     
     categories.forEach(cat => {
@@ -529,66 +544,77 @@
     bar.innerHTML = html;
   }
 
+  // Aksi saat Kategori diklik dengan Smooth Loading
   function selectCategory(cat, btnElem) {
-    selectedCategory = cat;
-    // Update kelas active pada tombol pill
-    document.querySelectorAll('.cat-pill').forEach(btn => btn.classList.remove('active'));
-    btnElem.classList.add('active');
-    filterAndRender();
-  }
-
-  function filterAndRender() {
-    const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
-    
-    // Filter data berdasarkan keyword pencarian dan kategori yang dipilih
-    filteredPosts = allPosts.filter(post => {
-      const matchKeyword = (post.judul || "").toLowerCase().includes(keyword) || (post.konten || "").toLowerCase().includes(keyword);
-      const matchCategory = (selectedCategory === "" || (post.kategori || "").trim().toLowerCase() === selectedCategory.toLowerCase());
-      return matchKeyword && matchCategory;
+    showSmoothLoading(() => {
+      selectedCategory = cat;
+      document.querySelectorAll('.cat-pill').forEach(btn => btn.classList.remove('active'));
+      btnElem.classList.add('active');
+      filterAndRender();
     });
-
-    currentDisplayed = 0;
-    document.getElementById('postsGrid').innerHTML = "";
-    
-    if (filteredPosts.length === 0) {
-      document.getElementById('postsGrid').innerHTML = "<div class='loading-state'>Tidak ada postingan yang ditemukan.</div>";
-      document.getElementById('loadMoreContainer').style.display = 'none';
-      return;
-    }
-
-    loadMorePosts();
   }
 
-  function loadMorePosts() {
-    const grid = document.getElementById('postsGrid');
-    const end = Math.min(currentDisplayed + postsPerLoad, filteredPosts.length);
-
-    for (let i = currentDisplayed; i < end; i++) {
-      const post = filteredPosts[i];
-      // Cari index asli postingan di array allPosts agar modal tidak salah ambil data
-      const originalIndex = allPosts.indexOf(post);
+  // Aksi saat tombol Cari atau Enter ditekan (Menggunakan metode .includes)
+  function filterAndRender() {
+    showSmoothLoading(() => {
+      const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
       
-      const images = (post.gambar || "").split(',').map(s => s.trim()).filter(s => s !== "");
-      const thumbnailSrc = images.length > 0 ? images[0] : "https://via.placeholder.com/600x400/e2e8f0/64748b?text=Tanpa+Gambar";
-      const kategoriText = post.kategori || "Uncategorized";
+      filteredPosts = allPosts.filter(post => {
+        const judul = (post.judul || "").toLowerCase();
+        const konten = (post.konten || "").toLowerCase();
+        
+        // Include search: Mencari kecocokan substring di judul atau konten
+        const matchKeyword = keyword === "" || judul.includes(keyword) || konten.includes(keyword);
+        const matchCategory = (selectedCategory === "" || (post.kategori || "").trim().toLowerCase() === selectedCategory.toLowerCase());
+        
+        return matchKeyword && matchCategory;
+      });
 
-      const cardHtml = `
-        <div class="card" onclick="openModal(${originalIndex})">
-          <div class="card-thumb-container">
-            <span class="category-badge">${kategoriText}</span>
-            <img src="${thumbnailSrc}" class="card-thumb" alt="Thumbnail" loading="lazy">
-          </div>
-          <div class="card-content">
-            <h3 class="card-title">${post.judul}</h3>
-            <span class="card-action-text">Klik untuk lihat detail <span>→</span></span>
-          </div>
-        </div>
-      `;
-      grid.insertAdjacentHTML('beforeend', cardHtml);
-    }
+      currentDisplayed = 0;
+      document.getElementById('postsGrid').innerHTML = "";
+      
+      if (filteredPosts.length === 0) {
+        document.getElementById('postsGrid').innerHTML = "<div class='loading-state'>Tidak ada postingan yang ditemukan.</div>";
+        document.getElementById('loadMoreContainer').style.display = 'none';
+        return;
+      }
 
-    currentDisplayed = end;
-    document.getElementById('loadMoreContainer').style.display = (currentDisplayed >= filteredPosts.length) ? 'none' : 'block';
+      loadMorePosts();
+    });
+  }
+
+  // Aksi Load More dengan Smooth Loading
+  function loadMorePosts() {
+    showSmoothLoading(() => {
+      const grid = document.getElementById('postsGrid');
+      const end = Math.min(currentDisplayed + postsPerLoad, filteredPosts.length);
+
+      for (let i = currentDisplayed; i < end; i++) {
+        const post = filteredPosts[i];
+        const originalIndex = allPosts.indexOf(post);
+        
+        const images = (post.gambar || "").split(',').map(s => s.trim()).filter(s => s !== "");
+        const thumbnailSrc = images.length > 0 ? images[0] : "https://via.placeholder.com/600x400/e2e8f0/64748b?text=Tanpa+Gambar";
+        const kategoriText = post.kategori || "Uncategorized";
+
+        const cardHtml = `
+          <div class="card" onclick="openModal(${originalIndex})">
+            <div class="card-thumb-container">
+              <span class="category-badge">${kategoriText}</span>
+              <img src="${thumbnailSrc}" class="card-thumb" alt="Thumbnail" loading="lazy">
+            </div>
+            <div class="card-content">
+              <h3 class="card-title">${post.judul}</h3>
+              <span class="card-action-text">Klik untuk lihat detail <span>→</span></span>
+            </div>
+          </div>
+        `;
+        grid.insertAdjacentHTML('beforeend', cardHtml);
+      }
+
+      currentDisplayed = end;
+      document.getElementById('loadMoreContainer').style.display = (currentDisplayed >= filteredPosts.length) ? 'none' : 'block';
+    });
   }
 
   function openModal(index) {
