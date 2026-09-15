@@ -28,16 +28,109 @@
     .container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 40px 20px;
+      padding: 10px 20px 40px 20px; /* Padding atas dirubah jadi 10px */
+    }
+
+    /* ========================================= */
+    /* HEADER & TITLE STYLES                     */
+    /* ========================================= */
+    .header-box {
+      background: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
+      padding: 35px 20px;
+      border-radius: 24px;
+      text-align: center;
+      color: white;
+      box-shadow: 0 10px 30px rgba(79, 70, 229, 0.2);
+      margin-bottom: 30px;
     }
     .page-title {
-      text-align: center;
-      font-size: 2.5rem;
+      font-size: 2.3rem;
       font-weight: 800;
-      margin-bottom: 40px;
-      background: linear-gradient(135deg, var(--primary), #9333ea);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      margin: 0 0 8px 0;
+      letter-spacing: -0.5px;
+    }
+    .page-subtitle {
+      font-size: 0.95rem;
+      opacity: 0.85;
+      font-weight: 500;
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ========================================= */
+    /* SEARCH & FILTER KATEGORI                  */
+    /* ========================================= */
+    .filter-section {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 35px;
+    }
+    .search-bar-wrapper {
+      display: flex;
+      gap: 10px;
+      max-width: 600px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .search-input {
+      flex: 1;
+      padding: 12px 18px;
+      border: 1px solid #cbd5e1;
+      border-radius: 14px;
+      font-size: 0.95ln;
+      outline: none;
+      background: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+      transition: all 0.3s;
+    }
+    .search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
+    }
+    .search-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0 24px;
+      border-radius: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .search-btn:hover { background: var(--primary-hover); }
+
+    /* Kategori Berjejer Pill Rounded */
+    .categories-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap; /* Otomatis turun ke bawah jika banyak */
+      justify-content: center;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .cat-pill {
+      background: white;
+      border: 1px solid #e2e8f0;
+      color: var(--text-muted);
+      padding: 6px 16px;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+      transition: all 0.2s;
+    }
+    .cat-pill:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .cat-pill.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
     }
 
     /* ========================================= */
@@ -214,7 +307,6 @@
       width: 100%;
       margin-bottom: 20px;
     }
-    
     .slide-main-container {
       width: 100%;
       aspect-ratio: 16 / 9;
@@ -233,10 +325,7 @@
       display: block;
       animation: fadeIn 0.4s ease;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
     .slide-btn {
       position: absolute;
@@ -278,31 +367,12 @@
       flex-shrink: 0;
       background: #e2e8f0;
     }
-    .thumb-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    .thumb-item img { width: 100%; height: 100%; object-fit: cover; }
     .thumb-item:hover { opacity: 0.9; }
-    .thumb-item.active {
-      border-color: var(--primary);
-      opacity: 1;
-      transform: scale(1.05);
-    }
+    .thumb-item.active { border-color: var(--primary); opacity: 1; transform: scale(1.05); }
 
-    .modal-title {
-      font-size: 2.2rem;
-      font-weight: 800;
-      margin-bottom: 20px;
-      line-height: 1.3;
-    }
-    .modal-desc {
-      font-size: 1.1rem;
-      color: #334155;
-      line-height: 1.8;
-      white-space: pre-line;
-      margin-bottom: 40px;
-    }
+    .modal-title { font-size: 2.2rem; font-weight: 800; margin-bottom: 20px; line-height: 1.3; }
+    .modal-desc { font-size: 1.1rem; color: #334155; line-height: 1.8; white-space: pre-line; margin-bottom: 40px; }
     .modal-link {
       display: inline-block;
       background: linear-gradient(135deg, var(--primary) 0%, #6366f1 100%);
@@ -315,10 +385,7 @@
       box-shadow: 0 10px 20px rgba(79,70,229,0.3);
       transition: all 0.3s;
     }
-    .modal-link:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 15px 25px rgba(79,70,229,0.4);
-    }
+    .modal-link:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(79,70,229,0.4); }
     
     .loading-state { text-align: center; padding: 50px; color: var(--text-muted); font-size: 1.2rem; }
   </style>
@@ -326,7 +393,25 @@
 <body>
 
 <div class="container">
-  <h1 class="page-title">Beranda Postingan</h1>
+  <!-- Header Rounded Super Cantik -->
+  <div class="header-box">
+    <h1 class="page-title">Apps Script Web App</h1>
+    <p class="page-subtitle">Free copy spreadsheet</p>
+  </div>
+
+  <!-- Search & Category Pills Section -->
+  <div class="filter-section">
+    <div class="search-bar-wrapper">
+      <input type="text" id="searchInput" class="search-input" placeholder="Cari judul postingan..." onkeyup="if(event.key==='Enter') filterAndRender()">
+      <button class="search-btn" onclick="filterAndRender()">🔍 Cari</button>
+    </div>
+    
+    <!-- Kategori Bulat Kecil Berjejer -->
+    <div class="categories-bar" id="categoriesBar">
+      <!-- Tombol "Semua" secara default aktif -->
+      <button class="cat-pill active" onclick="selectCategory('', this)">Semua</button>
+    </div>
+  </div>
   
   <div class="grid" id="postsGrid">
     <div class="loading-state">⏳ Sedang memuat data terbaru...</div>
@@ -344,7 +429,6 @@
   <button class="modal-close" onclick="closeModal()">✕</button>
   
   <div class="modal-content">
-    
     <div class="slideshow-wrapper" id="slideshowWrapper" style="display: none;">
       <div class="slide-main-container" id="slideMainContainer"></div>
       <button class="slide-btn slide-prev" onclick="changeSlide(-1)">❮</button>
@@ -362,10 +446,13 @@
 
 <script>
   let allPosts = [];
+  let filteredPosts = [];
   let currentDisplayed = 0;
   const postsPerLoad = 9;
+  
   let currentImages = [];
   let currentSlideIndex = 0;
+  let selectedCategory = "";
 
   window.addEventListener('DOMContentLoaded', () => { fetchData(); });
 
@@ -376,31 +463,79 @@
       
       const data = await response.json();
       allPosts = data.posts || data;
+      
+      // Render Kategori dari data JSON (mengambil dari data.categories atau otomatis dari posts)
+      renderCategories(data.categories || extractCatsFromPosts(allPosts));
 
-      document.getElementById('postsGrid').innerHTML = "";
-      if (allPosts.length === 0) {
-        document.getElementById('postsGrid').innerHTML = "<div class='loading-state'>Belum ada postingan.</div>";
-        return;
-      }
-      loadMorePosts();
+      filterAndRender(); // Tampilkan awal
     } catch (error) {
       console.error(error);
       document.getElementById('postsGrid').innerHTML = "<div class='loading-state'>Gagal memuat data.</div>";
     }
   }
 
+  function extractCatsFromPosts(posts) {
+    const cats = new Set();
+    posts.forEach(p => { if(p.kategori) cats.add(p.kategori.trim()); });
+    return Array.from(cats).sort();
+  }
+
+  function renderCategories(categories) {
+    const bar = document.getElementById('categoriesBar');
+    // Pertahankan tombol "Semua"
+    let html = `<button class="cat-pill ${selectedCategory === '' ? 'active' : ''}" onclick="selectCategory('', this)">Semua</button>`;
+    
+    categories.forEach(cat => {
+      html += `<button class="cat-pill ${selectedCategory === cat ? 'active' : ''}" onclick="selectCategory('${cat}', this)">${cat}</button>`;
+    });
+    bar.innerHTML = html;
+  }
+
+  function selectCategory(cat, btnElem) {
+    selectedCategory = cat;
+    // Update kelas active pada tombol pill
+    document.querySelectorAll('.cat-pill').forEach(btn => btn.classList.remove('active'));
+    btnElem.classList.add('active');
+    filterAndRender();
+  }
+
+  function filterAndRender() {
+    const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
+    
+    // Filter data berdasarkan keyword pencarian dan kategori yang dipilih
+    filteredPosts = allPosts.filter(post => {
+      const matchKeyword = (post.judul || "").toLowerCase().includes(keyword) || (post.konten || "").toLowerCase().includes(keyword);
+      const matchCategory = (selectedCategory === "" || (post.kategori || "").trim().toLowerCase() === selectedCategory.toLowerCase());
+      return matchKeyword && matchCategory;
+    });
+
+    currentDisplayed = 0;
+    document.getElementById('postsGrid').innerHTML = "";
+    
+    if (filteredPosts.length === 0) {
+      document.getElementById('postsGrid').innerHTML = "<div class='loading-state'>Tidak ada postingan yang ditemukan.</div>";
+      document.getElementById('loadMoreContainer').style.display = 'none';
+      return;
+    }
+
+    loadMorePosts();
+  }
+
   function loadMorePosts() {
     const grid = document.getElementById('postsGrid');
-    const end = Math.min(currentDisplayed + postsPerLoad, allPosts.length);
+    const end = Math.min(currentDisplayed + postsPerLoad, filteredPosts.length);
 
     for (let i = currentDisplayed; i < end; i++) {
-      const post = allPosts[i];
+      const post = filteredPosts[i];
+      // Cari index asli postingan di array allPosts agar modal tidak salah ambil data
+      const originalIndex = allPosts.indexOf(post);
+      
       const images = (post.gambar || "").split(',').map(s => s.trim()).filter(s => s !== "");
       const thumbnailSrc = images.length > 0 ? images[0] : "https://via.placeholder.com/600x400/e2e8f0/64748b?text=Tanpa+Gambar";
       const kategoriText = post.kategori || "Uncategorized";
 
       const cardHtml = `
-        <div class="card" onclick="openModal(${i})">
+        <div class="card" onclick="openModal(${originalIndex})">
           <div class="card-thumb-container">
             <span class="category-badge">${kategoriText}</span>
             <img src="${thumbnailSrc}" class="card-thumb" alt="Thumbnail" loading="lazy">
@@ -415,7 +550,7 @@
     }
 
     currentDisplayed = end;
-    document.getElementById('loadMoreContainer').style.display = (currentDisplayed >= allPosts.length) ? 'none' : 'block';
+    document.getElementById('loadMoreContainer').style.display = (currentDisplayed >= filteredPosts.length) ? 'none' : 'block';
   }
 
   function openModal(index) {
@@ -462,7 +597,6 @@
     document.getElementById('modalTitle').innerText = post.judul;
     document.getElementById('modalDesc').innerText = post.konten;
     
-    // PERBAIKAN LINK EKSTERNAL AUTOMATIS HASIL REVISI
     const linkBtn = document.getElementById('modalLink');
     let rawLink = (post.customLink || "").trim();
 
