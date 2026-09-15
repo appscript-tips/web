@@ -1,5 +1,14 @@
 [
   {
+    "no": 5,
+    "judul": "Sekolah",
+    "kategori": "Pendidikan",
+    "konten": "ssc",
+    "gambar": "https://lh3.googleusercontent.com/d/1VJ3lmErLJVLFykbD_lG299tw9w2e8icq",
+    "customLink": "www.a.com",
+    "tanggal": "2026-09-15T05:02:10.940Z"
+  },
+  {
     "no": 4,
     "judul": "a",
     "kategori": "Gege",
