@@ -224,7 +224,7 @@ function openModal(index) {
   if (modalTitle) modalTitle.innerText = post.judul;
   if (modalDesc) modalDesc.innerText = post.konten;
   
-  // 1. Tautan Eksternal Utama
+  // 1. Link Tautan Eksternal (Unduh / Salin Web App)
   const linkBtn = document.getElementById('modalLink');
   let rawLink = (post.customLink || "").trim();
 
@@ -236,7 +236,7 @@ function openModal(index) {
       linkBtn.href = rawLink;
       linkBtn.target = "_blank";
       linkBtn.rel = "noopener noreferrer";
-      linkBtn.style.display = "inline-block";
+      linkBtn.style.display = "inline-flex";
     } else {
       linkBtn.style.display = "none";
     }
@@ -245,12 +245,12 @@ function openModal(index) {
   // 2. Tombol Request WhatsApp
   const requestBtn = document.getElementById('requestCustomBtn');
   if (requestBtn) {
-    const waNumber = "6281234567890"; // Ganti dengan nomor WhatsApp kamu
+    const waNumber = "6281234567890"; // Ganti dengan nomor WhatsApp Anda
     const waText = encodeURIComponent(`Halo, saya ingin request custom terkait postingan: *${post.judul}*`);
     requestBtn.href = `https://wa.me/${waNumber}?text=${waText}`;
   }
 
-  // 3. Tombol Cara Pasang / Salin Web App
+  // 3. Tombol Tutorial / Cara Pasang
   const tutorialBtn = document.getElementById('tutorialBtn');
   if (tutorialBtn) {
     const tutorialLink = (post.tutorialLink || "").trim();
@@ -264,8 +264,7 @@ function openModal(index) {
       tutorialBtn.rel = "noopener noreferrer";
       tutorialBtn.style.display = "inline-flex";
     } else {
-      // Jika kosong di JSON, arahkan ke link default atau sembunyikan (misal diatur ke YouTube atau link panduan umum)
-      tutorialBtn.href = "https://youtube.com"; 
+      tutorialBtn.href = "https://youtube.com"; // Ganti link panduan default jika diperlukan
       tutorialBtn.target = "_blank";
       tutorialBtn.style.display = "inline-flex";
     }
