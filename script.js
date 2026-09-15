@@ -124,7 +124,7 @@ function filterAndRender() {
   
   if (filteredPosts.length === 0) {
     if (grid) {
-      grid.innerHTML = "<div class='loading-state'>Tidak ada postingan yang ditemukan dengan judul tersebut.</div>";
+      grid.innerHTML = "<div class='loading-state'>Hasil tidak ditemukan.</div>";
     }
     const loadMoreContainer = document.getElementById('loadMoreContainer');
     if (loadMoreContainer) loadMoreContainer.style.display = 'none';
@@ -245,8 +245,8 @@ function openModal(index) {
   // 2. Tombol Request WhatsApp
   const requestBtn = document.getElementById('requestCustomBtn');
   if (requestBtn) {
-    const waNumber = "6281234567890"; // Ganti dengan nomor WhatsApp Anda
-    const waText = encodeURIComponent(`Halo, saya ingin request custom terkait postingan: *${post.judul}*`);
+    const waNumber = "6285865480245"; // Ganti dengan nomor WhatsApp Anda
+    const waText = encodeURIComponent(`Halo, saya ingin request custom terkait pembuatan web app menggunakan GOogle APps Script..: *${post.judul}*`);
     requestBtn.href = `https://wa.me/${waNumber}?text=${waText}`;
   }
 
